@@ -2,7 +2,7 @@
 
 Kothika is an English vocabulary app that teaches words and phrases through natural conversations, then brings them back later for recall. It was built as an individual university web development project.
 
-**Live site:** https://AtihaOfficial.github.io/kothika/
+**Live site:** https://atihaofficial.github.io/Kothika/
 
 ## Features
 - **Search any English word or phrase.** Curated words and phrases work instantly. Other words are looked up live online.
