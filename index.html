@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#101820">
+
+
+<title>Kothika – From Words to Conversation</title>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23477B82'/%3E%3Ctext x='16' y='22' font-size='20' font-weight='700' text-anchor='middle' fill='%23F0F3F5' font-family='sans-serif'%3E%E0%A6%95%3C/text%3E%3C/svg%3E">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-amber-50 text-stone-800 min-h-screen">
+
+<header class="bg-teal-800 text-white">
+  <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+
+    <a class="brand" href="#" onclick="show('search');return false"
+       aria-label="Kothika – From Words to Conversation">
+      <span class="brand-mark" aria-hidden="true">ক</span>
+      <span class="brand-text">
+       <span class="brand-name">Kothika</span>
+        <span class="brand-tag">From Words to Conversation</span>
+      </span>
+    </a>
+
+    <nav class="flex flex-wrap gap-1 text-sm" id="nav" aria-label="Main">
+      <button data-tab="search" class="tab">Learn Words</button>
+      <button data-tab="home" class="tab">Dashboard</button>
+      <button data-tab="saved" class="tab">My Words <span id="savedCount" class="badge">0</span></button>
+      <button data-tab="quiz" class="tab">Daily Recall <span id="dueCount" class="badge">0</span></button>
+      <button data-tab="progress" class="tab">Progress</button>
+    </nav>
+
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-4 py-6">
+
+  <section id="home" class="panel"></section>
+
+  <section id="search" class="panel">
+    <div id="reminder"></div>
+
+    <div class="explore">
+      <h2 class="text-3xl sm:text-4xl font-bold">
+        Find the words. Discover the expressions.
+      </h2>
+
+      <p class="text-stone-500 mt-2">
+        Search any English word, idiom, phrasal verb or everyday phrase,
+        then see how people really use it.
+      </p>
+
+      <form id="searchForm" class="searchbar" role="search">
+        <input id="searchInput" class="sinput" type="search"
+          autocomplete="off" maxlength="60"
+          placeholder="Search any English word or phrase…"
+          aria-label="Search any English word or phrase">
+
+        <button class="sbtn bg-teal-700 hover:bg-teal-800 text-white">
+          Search
+        </button>
+      </form>
+
+      <div id="chips" class="flex flex-wrap items-center gap-2 mt-3"></div>
+    </div>
+
+    <div id="result" class="mt-6" aria-live="polite"></div>
+  </section>
+
+  <section id="saved" class="panel hidden"></section>
+  <section id="quiz" class="panel hidden"></section>
+  <section id="progress" class="panel hidden"></section>
+
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
