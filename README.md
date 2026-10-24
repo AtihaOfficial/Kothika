@@ -1,50 +1,70 @@
 # Kothika (কথিকা) – From Words to Conversation
 
-An English vocabulary app that teaches words through real conversations and brings them back later for recall.
-Built with HTML5, CSS3, Tailwind CSS (CDN) and vanilla JavaScript. No backend, no login, no AI service.
+Kothika is an English vocabulary app that teaches words and phrases through natural conversations, then brings them back later for recall. It was built as an individual university web development project.
+
+**Live site:** https://AtihaOfficial.github.io/kothika/
+
+## Features
+- **Search any English word or phrase.** Curated words and phrases work instantly. Other words are looked up live online.
+- **Meaning and usage:** definition, part of speech, pronunciation where available, examples, synonyms and antonyms.
+- **Listen:** recorded audio when the dictionary provides it, otherwise the browser's built-in voice.
+- **Bangla meaning:** hand-written for curated entries, and automatically translated for live lookups (marked as auto-translated).
+- **Conversations:** curated dialogues for built-in entries, and AI-generated dialogues for new words.
+- **Save and remove** words and phrases in "My Words".
+- **Daily Recall quiz** with a practice mode that does not change your schedule.
+- **Spaced repetition:** correct answers move a word up the review ladder of 1, 3, 7, 14 and 30 days. Wrong answers bring it back sooner.
+- **Progress page:** words saved, mastered, due today, quiz accuracy, questions answered and day streak.
+- **Optional browser notifications** for due words and finished focus sessions, with a Turn Off button.
+- **Focus timer** (2, 5, 10 or 15 minutes) that stays accurate in background tabs.
+- **Dashboard** with a time-based greeting and a quote that changes every day.
+- **Dark theme** and a responsive layout for desktop and mobile.
+
+## Technologies
+- HTML5, CSS3, Tailwind CSS (loaded from a CDN) and vanilla JavaScript
+- `localStorage` for saved words, progress and settings (no database, no login)
+- Free public services: dictionaryapi.dev, Wiktionary and MyMemory (translation)
+- Gemini AI, called through a Cloudflare Worker so the API key stays secret on the server
+
+## Project structure
+
+kothika/
+├── index.html   (page structure and navigation)
+├── style.css    (dark theme and custom styles)
+├── script.js    (all logic)
+└── README.md
+
 
 ## How to run
-1. Keep `index.html`, `style.css`, `script.js` in one folder named `kothika`.
-2. Double-click `index.html`, **or** in VS Code install "Live Server", right-click `index.html` → "Open with Live Server".
-3. **Tailwind is loaded from a CDN, so you need an internet connection.** Without it the layout loses most styling.
+1. Download or clone the project and keep the files in one folder.
+2. In VS Code, install the Live Server extension, right-click `index.html` and choose Open with Live Server.
+3. An internet connection is required for Tailwind, live dictionary lookups, translation and AI conversations. The built-in words and phrases still work without live lookups.
 
-## Architecture
-- `index.html`: header + 4 sections (Search, My Words, Daily Recall, Progress).
-- `style.css`: small custom styles (chat bubbles, quiz states, animation). Tailwind handles layout.
-- `script.js`: (1) data, (2) localStorage state, (3) tabs, (4) search, (5) saved list, (6) quiz, (7) progress.
+## How it works
+1. **Search:** the app checks the curated words and phrases and your saved items first. If nothing matches, it asks dictionaryapi.dev, then Wiktionary as a backup.
+2. **Translation:** the English definition is sent to a free translation service. If it fails, the Bangla line is hidden.
+3. **Pronunciation:** if the result has no IPA, the app reads it from the word's Wiktionary page.
+4. **Conversation:** for new words, the word and definition are sent to a Cloudflare Worker, which asks Gemini for a short two-person dialogue.
+5. **Save:** the item is stored in `localStorage` with a review stage and the next review time.
+6. **Review:** due items appear in Daily Recall. Questions alternate between a conversation with a blank and a meaning question.
+7. **Schedule:** a correct answer raises the stage and sets the next review time from the 1/3/7/14/30-day ladder.
 
-### Data
-Built-in `WORDS` array (15 words): word, pronunciation, part of speech, Bangla meaning, definition, synonyms, examples, one conversation (situation + dialogue lines), and a "Use it in your life" prompt.
-
-Saved in `localStorage` under `kothika_v1`:
-```
-{ saved: { Resilient: { word, savedAt, stage (0-5), next (timestamp), correct, wrong, last } },
+### Saved data format (in `localStorage`)
+{ saved: { word: { word, savedAt, stage (0-5), next (timestamp), correct, wrong, last, data? } },
   answered, correct, streak, lastDay }
-```
 
-### Main flow
-Search → read meaning, hear pronunciation, read conversation → Save → (1 day later) Daily Recall →
-correct answers raise the stage and push the next review to 1, 3, 7, 14, 30 days; wrong answers lower the stage and bring it back tomorrow.
-Even stages ask a **conversation fill-in-the-blank**; odd stages ask for the **word from its meaning**, so the word is met in a different form each time.
 
-## Presentation guide (about 5 minutes)
-1. **Purpose:** most dictionaries stop at the definition; Kothika teaches how to *use* a word in a conversation and checks recall later.
-2. **Technologies:** HTML structure, Tailwind + CSS for design, JavaScript for logic.
-3. **localStorage:** saves words and progress in the browser, so no server is needed.
-4. **Quizzes:** multiple choice with 3 random wrong options; two question types.
-5. **Review scheduling:** a simple spaced-repetition ladder (1/3/7/14/30 days).
-6. **Speech synthesis:** the browser's `SpeechSynthesisUtterance` reads the word aloud.
-7. **Limitations:** only 15 words, one conversation per word, data is per-browser, needs internet for Tailwind, speech voices differ by device.
-8. **Future work:** more words and situations, typed answers, import/export, dark mode, installable PWA, Bangla UI.
+## Limitations
+- Live phrase and idiom lookups depend on Wiktionary, and the curated phrase list is small.
+- Bangla for live words is machine translation and may not be exact.
+- AI conversations need internet and can occasionally fail, in which case none is shown.
+- Saved data lives only in one browser on one device (no accounts or sync).
+- Notifications and the timer only work while Kothika is open in a browser tab, because there is no server.
+- Tailwind through the CDN is meant for learning. A production site would build a smaller CSS file.
 
-## Viva questions
-1. **What problem does it solve?** Learners know definitions but not how to use words in conversation.
-2. **Why no backend?** The project is front-end only; localStorage is enough for personal data.
-3. **What is localStorage?** Browser key-value storage that stays after closing the tab; stores strings only, so I use `JSON.stringify`/`JSON.parse`.
-4. **How is search case-insensitive?** Both the input and word list are converted with `toLowerCase()`.
-5. **How does review scheduling work?** Each saved word has a `stage` and a `next` timestamp; correct answers move it up the 1/3/7/14/30-day ladder.
-6. **How are quiz options made?** The correct word plus 3 random others, shuffled with `sort(() => Math.random() - .5)`.
-7. **How does pronunciation work?** `speechSynthesis.speak()` with an English voice.
-8. **How is the streak calculated?** If the last finished session was yesterday, streak +1; otherwise it restarts at 1.
-9. **Why Tailwind?** Fast responsive styling with utility classes, no heavy CSS.
-10. **What would you improve?** More content, typed-answer quizzes, export/import of progress, and an offline build.
+## Future improvements
+- More curated words, phrases and conversations
+- Typed-answer quizzes and speaking practice
+- Export and import of saved words
+- User accounts and cloud sync with a real backend
+- An installable app (PWA) with offline support
+
